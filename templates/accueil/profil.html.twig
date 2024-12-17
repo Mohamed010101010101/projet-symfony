@@ -1,0 +1,308 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+
+    <style>
+
+
+        /* Corps de la page */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header du profil */
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .profile-header img {
+            border-radius: 50%;
+            max-width: 150px;
+            height: auto;
+        }
+
+        .profile-header .user-info {
+            flex: 1;
+            padding-left: 20px;
+        }
+
+        .profile-header .user-info p {
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .profile-header .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .profile-header .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        /* Section de Publications */
+        .profile-content {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .new-post-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .new-post-section textarea {
+            resize: none;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .new-post-section button {
+            align-self: flex-start;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .new-post-section button:hover {
+            background-color: #218838;
+        }
+
+        .posts-section {
+            margin-top: 30px;
+        }
+
+        .post {
+            padding: 15px;
+            border-bottom: 1px solid #f1f1f1;
+            margin-bottom: 20px;
+        }
+
+        .post .post-actions {
+            margin-top: 10px;
+        }
+
+        .like-btn, .comment-btn {
+            cursor: pointer;
+            color: #007bff;
+            margin-right: 15px;
+        }
+
+        .like-btn:hover, .comment-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* Modal de modification de profil */
+        .modal .modal-content {
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal .form-control {
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .modal .form-control:focus {
+            border-color: #007bff;
+        }
+
+        .modal .modal-header {
+            border-bottom: none;
+        }
+
+        .modal .close {
+            color: #aaa;
+            font-size: 1.5rem;
+        }
+
+        .modal .close:hover {
+            color: #000;
+        }
+
+        /* Responsivité */
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .profile-header .user-info {
+                padding-left: 0;
+                text-align: center;
+            }
+
+            .profile-header img {
+                max-width: 120px;
+            }
+
+            .new-post-section textarea {
+                width: 100%;
+            }
+
+            .new-post-section button {
+                width: 100%;
+            }
+
+            .posts-section {
+                margin-top: 20px;
+            }
+
+            .post {
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-header img {
+                max-width: 100px;
+            }
+
+            .profile-header .user-info p {
+                font-size: 1rem;
+            }
+
+            .new-post-section textarea {
+                font-size: 0.9rem;
+            }
+        }
+
+
+    </style>
+
+
+    <div class="container">
+        <h1 class="text-center my-4">Mon Profil</h1>
+
+        {% if app.user %}
+            <!-- Header du Profil -->
+            <div class="row">
+
+
+                <div class="col-md-6">
+                    <p><strong>Photo de Profil :</strong></p>
+                    {% if app.user.profilePicture %}
+                        <img src="{{ asset('uploads/profile_pictures/' ~ app.user.profilePicture) }}" alt="Photo de Profil" style="max-width: 200px; height: auto; border-radius: 50%;">
+                    {% else %}
+                        <p>Aucune photo de profil disponible.</p>
+                    {% endif %}
+
+                    <!-- Bouton pour modifier la photo -->
+
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Nom :</strong> {{ app.user.name }}</p>
+                    <p><strong>Prénom :</strong> {{ app.user.lastname }}</p>
+                    <p><strong>Email :</strong> {{ app.user.email }}</p>
+                    <p><strong>Date de naissance :</strong> {{ app.user.birthday|date('d/m/Y') }}</p>
+                    <a href="{{ path('profile_edit') }}" class="btn-primary"><button class="btn btn-primary" data-toggle="modal" data-target="#editProfileModal">Modifier</button></a>
+                </div>
+
+                <!-- Photo de Profil -->
+
+            </div>
+
+
+
+
+
+            <!-- Section de Publications -->
+            <div class="profile-content mt-4">
+                <div class="new-post-section">
+                    <textarea placeholder="Exprimez-vous..." class="new-post-text form-control"></textarea>
+                    <button class="btn btn-primary mt-2" id="postButton">Publier</button>
+                </div>
+
+                <div class="posts-section">
+                    <h3>Publications récentes</h3>
+                    {% for post in app.user.publications %}
+                        <div class="post mt-4">
+                            <p>{{ post.content }}</p>
+                            <small>Posté le {{ post.createdAt|date('d/m/Y H:i') }}</small>
+                            <div class="post-actions">
+                                <span class="like-btn" data-post-id="{{ post.id }}">J'aime</span>
+                                <span class="comment-btn" data-post-id="{{ post.id }}">Commenter</span>
+                            </div>
+                        </div>
+                    {% else %}
+                        <p>Aucune publication pour le moment.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Modal de modification de profil -->
+
+        {% else %}
+            <p>Aucun utilisateur connecté.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        // JavaScript pour gérer la publication
+        document.getElementById('postButton').addEventListener('click', function() {
+            const content = document.querySelector('.new-post-text').value;
+            if (content) {
+                // Simuler la publication (vous pouvez envoyer une requête AJAX ici)
+                alert('Publication réussie!');
+                document.querySelector('.new-post-text').value = '';  // Effacer le champ
+            } else {
+                alert('Veuillez saisir un texte pour la publication.');
+            }
+        });
+
+        // JavaScript pour gérer les actions "J'aime" et "Commenter"
+        document.querySelectorAll('.like-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const postId = button.getAttribute('data-post-id');
+                alert('Vous aimez la publication ' + postId);
+            });
+        });
+
+        document.querySelectorAll('.comment-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const postId = button.getAttribute('data-post-id');
+                alert('Vous commentez la publication ' + postId);
+            });
+        });
+    </script>
+
+{% endblock %}

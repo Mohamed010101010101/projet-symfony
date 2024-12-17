@@ -1,0 +1,291 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User index{% endblock %}
+
+{% block body %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .table thead {
+            background-color: #343a40;
+            color: white;
+        }
+
+        .table th, .table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .table a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .table a:hover {
+            text-decoration: underline;
+        }
+
+        .filter-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .filter-container input {
+            padding: 10px;
+            width: 50%;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .filter-container input:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            gap: 20px;
+        }
+
+        .stat-card {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .header-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin: 20px 0;
+            padding: 10px;
+        }
+
+        .header-buttons .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 8px;
+            text-decoration: none;
+        }
+
+        .header-buttons .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .header-buttons .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .header-buttons .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .header-buttons .btn-danger {
+            background-color: #dc3545;
+            border: none;
+        }
+
+        .header-buttons .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+
+
+    </style>
+
+    <h1>Admin Dashboard</h1>
+
+    <div class="header-buttons">
+        <a href="{{ path('user_accueil') }}" class="btn btn-primary">Revenir à la page d'accueil</a>
+        <a href="{{ path('app_logout') }}" class="btn btn-danger">Se déconnecter</a>
+    </div>
+
+
+    <div class="stats-container row">
+        <div class="col-md-3 stat-card">
+            <div class="stat">
+                <h3 class="stat-title">Utilisateurs Totaux:</h3>
+                <p class="stat-value">{{ totalUsers }}</p>
+            </div>
+        </div>
+        <div class="col-md-3 stat-card">
+            <div class="stat">
+                <h3 class="stat-title">Publications Totales:</h3>
+                <p class="stat-value">{{ totalPublications }}</p>
+            </div>
+        </div>
+        <div class="col-md-3 stat-card">
+            <div class="stat">
+                <h3 class="stat-title">Messages Totaux:</h3>
+                <p class="stat-value">{{ totalMessages }}</p>
+            </div>
+        </div>
+        <div class="col-md-3 stat-card">
+            <div class="stat">
+                <h3 class="stat-title">Administrateurs:</h3>
+                <p class="stat-value">{{ totalAdmins }}</p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="filter-container">
+        <input type="text" id="userSearch" placeholder="Rechercher un utilisateur...">
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Lastname</th>
+            <th>Email</th>
+            <th>Birthday</th>
+            <th>Password</th>
+            <th>Roles</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.lastname }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.birthday ? user.birthday|date('Y-m-d') : '' }}</td>
+                <td>{{ user.password }}</td>
+                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+                <td>
+                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
+                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_user_new') }}">Create new</a>
+
+    {% block javascripts %}
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const input = document.getElementById("userSearch");
+                const table = document.querySelector(".table tbody");
+
+                input.addEventListener("keyup", function () {
+                    const filter = input.value.toLowerCase();
+                    const rows = table.getElementsByTagName("tr");
+
+                    Array.from(rows).forEach((row) => {
+                        const cells = row.getElementsByTagName("td");
+                        let match = false;
+
+                        Array.from(cells).forEach((cell) => {
+                            if (cell.textContent.toLowerCase().includes(filter)) {
+                                match = true;
+                            }
+                        });
+
+                        row.style.display = match ? "" : "none";
+                    });
+                });
+            });
+        </script>
+    {% endblock %}
+
+    <h1>Publication index</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Content</th>
+            <th>Created_at</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for publication in publications %}
+            <tr>
+                <td>{{ publication.id }}</td>
+                <td>{{ publication.content }}</td>
+                <td>{{ publication.createdAt ? publication.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_publication_show', {'id': publication.id}) }}">show</a>
+                    <a href="{{ path('app_publication_edit', {'id': publication.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_publication_new') }}">Create new</a>
+{% endblock %}

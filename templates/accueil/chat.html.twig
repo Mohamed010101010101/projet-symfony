@@ -1,0 +1,150 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Chat avec {{ friend }}{% endblock %}
+
+{% block body %}
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fde8d7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            max-width: 1200px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #7d4b3e;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+        }
+
+        .sidebar {
+            background-color: #d9e4dd;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .sidebar h2, .sidebar h3 {
+            color: #5c805f;
+        }
+
+        .posts .post {
+            background-color: #fff;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .posts .post img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .posts .post h4 {
+            margin: 10px 0;
+        }
+
+        .posts .actions span {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .messages ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .messages ul li {
+            margin-bottom: 10px;
+        }
+
+        .messages ul li a {
+            text-decoration: none;
+            color: #7d4b3e;
+        }
+
+        .chat-container {
+            margin: 20px auto;
+            max-width: 600px;
+        }
+
+        .chat-container header h1 {
+            text-align: center;
+            color: #7d4b3e;
+        }
+
+        .chat .messages {
+            margin-bottom: 20px;
+        }
+
+        .chat .message-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat .message-form input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .chat .message-form button {
+            background-color: #7d4b3e;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+
+    </style>
+
+
+
+    <div class="chat-container">
+        <header>
+            <h1>Chat avec {{ friend }}</h1>
+        </header>
+        <main class="chat">
+            <div class="messages">
+                {% for message in messages %}
+                    <p><strong>{{ message.sender }} :</strong> {{ message.message }}</p>
+                {% endfor %}
+            </div>
+            <form class="message-form">
+                <input type="text" placeholder="Type something...">
+                <button type="submit">Envoyer</button>
+            </form>
+        </main>
+    </div>
+
+{% endblock %}

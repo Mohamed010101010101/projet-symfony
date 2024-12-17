@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commenter la publication{% endblock %}
+
+{% block body %}
+    <div class="publication">
+        <h2>Commenter la publication</h2>
+
+        <div class="publication-content">
+            <h4>{{ publication.user.name }}</h4>
+            <p>{{ publication.content }}</p>
+            <small>Publié le {{ publication.createdAt|date('d/m/Y H:i') }}</small>
+        </div>
+
+        <div class="comment-form">
+            <h3>Ajouter un commentaire</h3>
+
+            {# Affichage du formulaire de commentaire #}
+            <form action="{{ path('commenter', {'id': publication.id}) }}" method="post">
+                {{ form_start(form) }}  {# Commencer le formulaire #}
+                {{ form_widget(form) }}  {# Afficher tous les champs du formulaire #}
+                <button type="submit" class="btn btn-primary">Commenter</button>
+                {{ form_end(form) }}  {# Fin du formulaire #}
+            </form>
+        </div>
+
+        <div class="comments-section">
+            <h3>Commentaires</h3>
+
+            {# Afficher les commentaires existants #}
+            {% if publication.commentaires|length > 0 %}
+                <div class="comments-list">
+                    {% for commentaire in publication.commentaires %}
+                        <div class="comment">
+                            <p><strong>{{ commentaire.user.name }}</strong>: {{ commentaire.content }}</p>
+                            <small>Posté le {{ commentaire.createdAt|date('d/m/Y H:i') }}</small>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Aucun commentaire pour cette publication.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% if friend %}
+    <h3>Chat avec {{ friend.name }}</h3>
+    <!-- Affichage des messages entre l'utilisateur et son ami -->
+    <div class="messages-list">
+        {% for msg in messages %}
+            <div class="message">
+                <p><strong>{{ msg.sender.name }}:</strong> {{ msg.content }}</p>
+            </div>
+        {% else %}
+            <p>Aucun message encore.</p>
+        {% endfor %}
+    </div>
+{% endif %}

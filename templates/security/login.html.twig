@@ -1,0 +1,166 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}"/>
+{% endblock %}
+
+{% block body %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Conteneur principal pour centrer le formulaire et l'image */
+        .main-container {
+            display: flex;
+            justify-content: flex-start; /* Aligne le formulaire à gauche */
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Conteneur du formulaire */
+        .form-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px; /* Garde une largeur maximale pour le formulaire */
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: left; /* Aligne le titre à gauche */
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .alert {
+            padding: 15px;
+            background-color: #4CAF50; /* Couleur de fond pour succès */
+            color: white;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .alert-danger {
+            background-color: #f44336; /* Couleur de fond pour erreur */
+        }
+
+        .btn-primary {
+            display: block;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        @media screen and (max-width: 768px) {
+            .main-container {
+                flex-direction: column; /* Permet au formulaire et à l'image de s'aligner verticalement */
+                justify-content: center; /* Centre verticalement */
+            }
+
+            .form-container {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .image-container {
+                display: none; /* Masque l'image sur les petits écrans */
+            }
+        }
+    </style>
+
+    <div class="main-container">
+        <div class="form-container">
+            <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+
+            <form method="post">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="mb-3">
+                        You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+                    </div>
+                {% endif %}
+
+                <label for="inputEmail">Email</label>
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
+
+                <label for="inputPassword">Password</label>
+                <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                <button class="btn btn-lg btn-primary" type="submit">
+                    Sign in
+                </button>
+
+                <div>
+                    <p>Pas encore un compte ?</p>
+                    <a href="{{ path('app_register') }}" class="btn btn-primary">S'inscrire</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="image-container">
+            <img src="{{ asset('images/logo_minifb.png') }}" alt="Logo MiniFacebook">
+        </div>
+    </div>
+{% endblock %}

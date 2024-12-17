@@ -1,0 +1,174 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Form Container */
+        .main-container {
+            display: flex;
+            justify-content: flex-start;  /* Aligner à gauche */
+            align-items: flex-start;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        /* Form Styles */
+        .form-container {
+            width: 100%;
+            max-width: 500px;  /* Vous pouvez ajuster la largeur selon vos besoins */
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header */
+        h1 {
+            text-align: left;  /* Aligné à gauche */
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Input Fields */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        input[type="password"] {
+            font-family: Arial, sans-serif;
+        }
+
+        /* Button Styles */
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Error and Success Alerts */
+        .alert {
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .alert-danger {
+            background-color: #f44336;
+        }
+
+        .alert ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        .alert li {
+            font-size: 14px;
+        }
+
+        /* Link Styles */
+        a.btn {
+            display: inline-block;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        a.btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+
+            .form-container {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .image-container {
+                display: none;
+            }
+        }
+    </style>
+
+    <div class="main-container">
+        <div class="form-container">
+            <h1>Inscription</h1>
+
+            <form method="post" action="{{ path('app_register') }}">
+                {% if app.request.method == 'POST' %}
+                    {% if form.vars.valid %}
+                        <div class="alert alert-success">Inscription réussie !</div>
+                    {% else %}
+                        <div class="alert alert-danger">
+                            <ul>
+                                {% for error in form.vars.errors %}
+                                    <li>{{ error.message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                {{ form_start(registrationForm) }}
+                {{ form_row(registrationForm.name, {'attr': {'placeholder': 'Entrez votre prénom'}}) }}
+                {{ form_row(registrationForm.lastname, {'attr': {'placeholder': 'Entrez votre nom'}}) }}
+                {{ form_row(registrationForm.email, {'attr': {'placeholder': 'Entrez votre email'}}) }}
+                {{ form_row(registrationForm.birthday) }}
+                {{ form_row(registrationForm.plainPassword, {'attr': {'placeholder': 'Entrez votre mot de passe'}}) }}
+
+
+                <button class="btn" type="submit">S'inscrire</button>
+
+                <div>
+                    <p>Déjà un compte ?</p>
+                    <a href="{{ path('app_login') }}" class="btn btn-primary">Se connecter</a>
+                </div>
+
+                {{ form_end(registrationForm) }}
+            </form>
+        </div>
+
+        <div class="image-container">
+            <img src="{{ asset('images/logo_minifb.png') }}" alt="Logo MiniFacebook">
+        </div>
+    </div>
+{% endblock %}

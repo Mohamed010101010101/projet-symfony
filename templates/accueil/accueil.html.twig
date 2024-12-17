@@ -1,0 +1,395 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fde8d7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            max-width: 1200px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #7d4b3e;
+        }
+
+        .search-bar input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 300px;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .sidebar {
+            background-color: #d9e4dd;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .sidebar h2, .sidebar h3 {
+            color: #5c805f;
+        }
+
+        /* Section des publications */
+        .posts {
+            margin-top: 20px;
+        }
+
+        .posts .new-post {
+            background-color: #fff;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 15px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .posts .new-post h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Mise à jour du style du champ de publication */
+        .posts .new-post textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            color: #555;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-family: 'Arial', sans-serif;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        /* Placeholder plus visible et amélioré */
+        .posts .new-post textarea::placeholder {
+            color: #aaa;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        /* Section des options multimédia */
+        .posts .new-post .media-options {
+            display: flex;
+            justify-content: flex-start;
+            gap: 20px;
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #7d4b3e;
+            cursor: pointer;
+        }
+
+        .posts .new-post .media-options span:hover {
+            text-decoration: underline;
+        }
+
+        /* Bouton publier */
+        .posts .new-post button {
+            background-color: #7d4b3e;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            float: right;
+            margin-top: 15px;
+        }
+
+        .posts .new-post button:hover {
+            background-color: #5a3329;
+            transform: scale(1.05);
+        }
+
+        .posts .post {
+            background-color: #fff;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .posts .post img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .posts .post h4 {
+            margin: 0 0 10px;
+            font-weight: bold;
+            color: #7d4b3e;
+        }
+
+        .posts .post p {
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .posts .post small {
+            display: block;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #777;
+        }
+
+        .posts .actions {
+            display: flex;
+            justify-content: flex-start;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .posts .actions span {
+            font-size: 1.1rem;
+            color: #7d4b3e;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .posts .actions span:hover {
+            color: #5a3329;
+        }
+
+        .messages ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .messages ul li {
+            margin-bottom: 10px;
+        }
+
+        .messages ul li a {
+            text-decoration: none;
+            color: #7d4b3e;
+        }
+
+        /* Styliser les commentaires */
+        .comments {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .comments h5 {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #5c805f;
+        }
+
+        .comments textarea {
+            width: 100%;
+            height: 60px;
+            resize: none;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .comments button {
+            background-color: #5c805f;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            float: right;
+            transition: background-color 0.3s ease;
+        }
+
+        .comments button:hover {
+            background-color: #3b593e;
+        }
+
+        /* Liste des commentaires */
+        .comments-list {
+            margin-top: 15px;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+
+        .comments-list p {
+            font-size: 0.9rem;
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .comments-list small {
+            font-size: 0.8rem;
+            color: #777;
+        }
+    </style>
+
+
+    <div class="container">
+        <header>
+            <h1>MiniFacebook</h1>
+            <div class="search-bar">
+                <input type="text" placeholder="Recherche">
+            </div>
+            <!-- Lien vers la page profil -->
+            <a href="{{ path('user_profil') }}" style="text-decoration: none; color: #7d4b3e; font-weight: bold;">
+                Mon Profil
+            </a>
+
+            <!-- Lien pour se déconnecter -->
+            <a href="{{ path('user_deconnecter') }}" style="text-decoration: none; color: #7d4b3e; font-weight: bold;">
+                Déconnecter
+            </a>
+
+        </header>
+
+        <main class="content">
+            <!-- Barre latérale gauche (amies en ligne et hors ligne) -->
+            <aside class="sidebar">
+                <div class="friends">
+                    <h2>Mes Amies</h2>
+                    <h3>Amie en ligne</h3>
+                    <ul>
+                        {% for friend in friends %}
+                            <li>{{ friend.name }}</li>
+                        {% else %}
+                            <li>Aucun ami trouvé.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Barre de nouvelle publication -->
+            <section class="posts">
+                <div class="new-post">
+                    <h3>Créer une nouvelle publication</h3>
+                    {{ form_start(publicationForm) }}
+                    {{ form_widget(publicationForm.content, { 'attr': { 'placeholder': 'Exprimez-vous...' } }) }}
+                        <div class="media-options">
+                            <label for="upload-photo">
+                                <i class="fa fa-image"></i> Ajouter une photo
+                                <input type="file" id="upload-photo" accept="image/*">
+                            </label>
+                            <label for="upload-video">
+                                <i class="fa fa-video"></i> Ajouter une vidéo
+                                <input type="file" id="upload-video" accept="video/*">
+                            </label>
+                        </div>
+                        <button type="submit">Publier</button>
+                    {{ form_end(publicationForm) }}
+                </div>
+
+                <!-- Publications -->
+                {% for publication in publications %}
+                    <div class="post">
+                        <h4>{{ publication.user.name }}</h4>
+                        <p>{{ publication.content }}</p>
+                        <small>Publié le {{ publication.createdAt|date('d/m/Y H:i') }}</small>
+
+                        <!-- Formulaire de commentaire pour la publication -->
+                        <div class="comments">
+                            <h5>Ajouter un commentaire</h5>
+                            {{ form_start(forms[publication.id]) }}
+                            {{ form_widget(forms[publication.id].content, { 'attr': { 'placeholder': 'Écrivez un commentaire...' } }) }}
+                            <button type="submit">Commenter</button>
+                            {{ form_end(forms[publication.id]) }}
+                        </div>
+
+                        <!-- Affichage des commentaires -->
+                        <!-- Liste des commentaires -->
+                        <div class="comments-list">
+                            <h5>Commentaires</h5>
+                            {% for commentaire in publication.commentaires %}
+                                <p>
+                                    <strong>{{ commentaire.user.name }}:</strong>
+                                    {{ commentaire.content }}
+                                </p>
+                                <small>Publié le {{ commentaire.createdAt|date('d/m/Y H:i') }}</small>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+
+
+
+
+                <div class="post">
+                    <img src="{{ asset('images/Capture d’écran 2024-11-21 214927.png') }}" alt="Cristiano">
+                    <h4>Cristiano</h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <div class="actions">
+                        <span>❤10.9M</span>
+                        <span>💬1.2M</span>
+                        <span>📩</span>
+                    </div>
+                </div>
+                <div class="post">
+                    <img src="{{ asset('images/Capture d\'écran 2024-11-21 212822.png') }}" alt="Zikou">
+                    <h4>Zikou</h4>
+                    <p>takes mtaa lglace w bira </p>
+                    <div class="actions">
+                        <span>❤2</span>
+                        <span>💬1</span>
+                        <span>📩</span>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Section des messages -->
+            <section class="messages">
+                <aside class="sidebar">
+                    <div class="friends">
+                        <h2>Messages</h2>
+                        <ul>
+                            {% for friend in friends %}
+                                <li>
+                                    <a href="{{ path('message_chat', {'friend': friend.id}) }}">
+                                        {{ friend.name }}
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li>Aucun ami trouvé.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </aside>
+            </section>
+
+
+
+        </main>
+    </div>
+{% endblock %}
